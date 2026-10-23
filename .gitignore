@@ -1,0 +1,14 @@
+.env
+.env.*
+!.env.example
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+chroma_db/
+data/*.pdf
+.DS_Store
+
+static/
+data/history.json
