@@ -1,0 +1,8 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    { "name": "Streamlit: HR Assistant", "type": "debugpy", "request": "launch", "module": "streamlit",
+      "args": ["run", "app.py", "--server.port", "8501"], "python": "${workspaceFolder}/.venv/bin/python",
+      "cwd": "${workspaceFolder}", "justMyCode": true }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "Setup (venv + install + tests)", "type": "shell", "command": "./setup.sh", "problemMatcher": [] },
+    { "label": "Run HR Assistant (Streamlit)", "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python -m streamlit run app.py --server.port 8501",
+      "isBackground": true, "problemMatcher": [], "group": { "kind": "build", "isDefault": true } },
+    { "label": "Ingest PDF", "type": "shell", "command": "${workspaceFolder}/.venv/bin/python ingest.py", "problemMatcher": [] },
+    { "label": "Ask the 5 questions", "type": "shell", "command": "${workspaceFolder}/.venv/bin/python ask.py --eval", "problemMatcher": [] },
+    { "label": "Run tests", "type": "shell", "command": "${workspaceFolder}/.venv/bin/python -m pytest -q", "problemMatcher": [], "group": "test" }
+  ]
+}
