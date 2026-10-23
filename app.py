@@ -8,7 +8,7 @@ import importlib
 import os
 
 import hr_assistant.config, hr_assistant.sections, hr_assistant.ingest, hr_assistant.pdf_tools  # noqa: E401
-import hr_assistant.history, hr_assistant.rag  # noqa: E401
+import hr_assistant.history, hr_assistant.rag, hr_assistant.bootstrap  # noqa: E401
 
 
 @st.cache_resource
@@ -30,6 +30,17 @@ from hr_assistant.ingest import IngestError, ingest, last_ingest  # noqa: E402
 from hr_assistant.questions import QUESTIONS
 
 st.set_page_config(page_title="HR Policy Assistant", page_icon="📘", layout="wide")
+
+
+@st.cache_resource(show_spinner="Preparing the HR manual (first start downloads and indexes it, ~1–2 min)…")
+def _bootstrap():
+    try:
+        return hr_assistant.bootstrap.ensure_ready()
+    except Exception as e:  # app still opens; Upload & Ingest remains available
+        return f"setup failed: {type(e).__name__}: {e}"
+
+
+BOOT_STATUS = _bootstrap()
 
 # ---------------------------------------------------------------- state & theme
 S = st.session_state
@@ -462,7 +473,8 @@ def view_settings():
             ("ChromaDB location", str(config.CHROMA_DIR)),
             ("Gemini", f"✅ key set · model {config.GEMINI_MODEL}" if config.gemini_key()
              else "❌ no GEMINI_API_KEY in .env — extractive answers only"),
-            ("Last successful ingestion", li.get("completed_at") if li else "—")]
+            ("Last successful ingestion", li.get("completed_at") if li else "—"),
+            ("Startup check", BOOT_STATUS)]
     for k, v in rows:
         c1, c2 = st.columns([1, 3])
         c1.markdown(f"**{k}**")
